@@ -1,0 +1,25 @@
+name: compass-backend
+services:
+  database:
+    container_name: compass-db
+    image: postgres:15
+    environment:
+      POSTGRES_USER: devlocaluser
+      POSTGRES_PASSWORD: devlocaluser1234
+      POSTGRES_DB: devlocaldb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  cache:
+    image: redis:7.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass redis1234
+    volumes: 
+      - cache:/data
+volumes:
+  pgdata: {}
+  cache:
+    driver: local
