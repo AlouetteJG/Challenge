@@ -4,7 +4,7 @@
 
 input CreateTaskInput {
   assignedId: Int!
-  description: String!
+  description: String
   status: TaskStatus!
   title: String!
 }
@@ -34,7 +34,7 @@ type Query {
 
 type Task {
   assigned: User!
-  description: String!
+  description: String
   id: Float!
   status: TaskStatus!
   title: String!

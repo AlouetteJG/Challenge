@@ -23,9 +23,9 @@ export class Task{
     @Column()
     title:string;
 
-    @Field()
-    @Column()
-    description:string;
+    @Field({ nullable: true })
+    @Column({ nullable: true })
+    description?:string;
 
     @Field(() => User)
     @ManyToOne(() => User, user => user.tasks, { eager: true })
