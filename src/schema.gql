@@ -2,21 +2,56 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input CreateTaskInput {
+  assignedId: Int!
+  description: String!
+  status: TaskStatus!
+  title: String!
+}
+
 input CreateUserInput {
   email: String!
   password: String!
   role: String!
+  status: String!
 }
 
 type Mutation {
+  createTask(createTaskInput: CreateTaskInput!): Task!
   createUser(data: CreateUserInput!): User!
+  removeTask(id: Float!): Boolean!
   removeUser(id: Float!): Boolean!
+  updateTask(updateTaskInput: UpdateTaskInput!): Task!
   updateUser(updateUserInput: UpdateUserInput!): User!
 }
 
 type Query {
-  findAll: [User!]!
+  findAllTasks: [Task!]!
+  findAllUsers: [User!]!
+  findTaskById(id: Float!): Task!
   findUserById(id: Float!): User!
+}
+
+type Task {
+  assigned: User!
+  description: String!
+  id: Float!
+  status: TaskStatus!
+  title: String!
+}
+
+enum TaskStatus {
+  DONE
+  INPROGRESS
+  TODO
+}
+
+input UpdateTaskInput {
+  assignedId: Int
+  description: String
+  id: Int!
+  status: TaskStatus
+  title: String
 }
 
 input UpdateUserInput {
@@ -24,10 +59,13 @@ input UpdateUserInput {
   id: Int!
   password: String
   role: String
+  status: String
 }
 
 type User {
   email: String!
   id: ID!
   role: String!
+  status: String!
+  tasks: [Task!]
 }

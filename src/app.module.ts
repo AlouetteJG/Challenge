@@ -5,6 +5,8 @@ import { join } from 'path';
 import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/user.entity';
+import { TaskModule } from './task/task.module';
+import { Task } from './task/task.entity';
 
 @Module({
   imports: [
@@ -21,10 +23,11 @@ import { User } from './user/user.entity';
       username: 'devlocaluser',
       password: 'devlocaluser1234',
       database: 'devlocaldb',
-      entities: [User],
+      entities: [User,Task],
       synchronize: true,
     }),
     UserModule,
+    TaskModule,
   ],
   controllers: [],
   providers: [],

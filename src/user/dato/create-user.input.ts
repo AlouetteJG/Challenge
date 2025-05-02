@@ -1,4 +1,5 @@
 import { Field, InputType } from "@nestjs/graphql";
+import { UserStatus } from "../user.entity";
 
 @InputType()
 export class CreateUserInput {
@@ -10,5 +11,8 @@ export class CreateUserInput {
 
     @Field()
     role: 'admin' | 'member';
+
+    @Field()
+    status: UserStatus;
 
 }

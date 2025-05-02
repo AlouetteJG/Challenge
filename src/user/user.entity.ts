@@ -1,7 +1,9 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Task } from 'src/task/task.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 export type UserRole = 'admin' | 'member';
+export type UserStatus = 'active' | 'inactive';
 
 @ObjectType()
 @Entity()
@@ -20,5 +22,13 @@ export class User {
     @Field()
     @Column({type:'varchar'})
     role: UserRole;
+
+    @Field()
+    @Column()
+    status: UserStatus;
+
+    @Field(() => [Task], { nullable: true })
+    @OneToMany(() => Task, task => task.assigned)
+    tasks?: Task[];
 
 }

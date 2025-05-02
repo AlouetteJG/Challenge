@@ -11,12 +11,12 @@ export class UserService{
         private readonly userRespository:Repository<User>,
     ){}
 
-    async create(userData: Partial<User>):Promise<User> {
+    async createUser(userData: Partial<User>):Promise<User> {
         const user = this.userRespository.create(userData);
         return this.userRespository.save(user);
     }
 
-    async update(updateUserInput: UpdateUserInput): Promise<User> {
+    async updateUser(updateUserInput: UpdateUserInput): Promise<User> {
         const user = await this.userRespository.preload(updateUserInput);
         if (!user) {
             throw new NotFoundException(`User with ID ${updateUserInput.id} not found`);
@@ -24,7 +24,7 @@ export class UserService{
         return this.userRespository.save(user);
     }
 
-    async remove(id:number):Promise<boolean>{
+    async removeUser(id:number):Promise<boolean>{
         const result = await this.userRespository.delete(id);
         if (!result.affected) {
             throw new NotFoundException(`User with ID ${id} not found`);
@@ -33,17 +33,15 @@ export class UserService{
         return true;    
     }
 
-    async findOne(id: number): Promise<User> {
+    async findOneUser(id: number): Promise<User> {
         const user = await this.userRespository.findOneBy({ id });
-        if (!user) throw new NotFoundException(`User with ID ${id} not found`);
+        if (!user) {
+            throw new NotFoundException(`User with ID ${id} not found`);
+        }
         return user;
     }
 
-    async findByEmail(email:string):Promise<User | null> {
-        return this.userRespository.findOne({where:{email}});
-    }
-
-    async findAll():Promise <User[]>{
+    async findAllUsers():Promise <User[]>{
         return this.userRespository.find();
     }
     
