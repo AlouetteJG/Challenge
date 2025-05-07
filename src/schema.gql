@@ -16,9 +16,15 @@ input CreateUserInput {
   status: String!
 }
 
+input LoginInput {
+  email: String!
+  password: String!
+}
+
 type Mutation {
   createTask(createTaskInput: CreateTaskInput!): Task!
   createUser(data: CreateUserInput!): User!
+  login(loginInput: LoginInput!): String!
   removeTask(id: Float!): Boolean!
   removeUser(id: Float!): Boolean!
   updateTask(updateTaskInput: UpdateTaskInput!): Task!

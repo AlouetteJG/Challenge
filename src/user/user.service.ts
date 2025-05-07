@@ -2,7 +2,8 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { User } from "./user.entity";
-import { UpdateUserInput } from "./dato/update-user.input";
+import { UpdateUserInput } from "./dto/update-user.input";
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService{
@@ -12,7 +13,14 @@ export class UserService{
     ){}
 
     async createUser(userData: Partial<User>):Promise<User> {
-        const user = this.userRespository.create(userData);
+        if (!userData.password) {
+            throw new Error('Password is required');
+        }
+        const hashedPassword = await bcrypt.hash(userData.password, 10);
+        const user = this.userRespository.create({
+            ...userData,
+            password: hashedPassword,
+        });
         return this.userRespository.save(user);
     }
 
@@ -37,6 +45,17 @@ export class UserService{
         const user = await this.userRespository.findOneBy({ id });
         if (!user) {
             throw new NotFoundException(`User with ID ${id} not found`);
+        }
+        return user;
+    }
+
+    async findByEmail(email:string):Promise<User>{
+        const user = await this.userRespository.findOne({where:{
+            email},
+            select: ['id', 'email', 'password', 'status','role'],
+        });
+        if(!user){
+            throw new NotFoundException(`User with email ${email} not found`)
         }
         return user;
     }

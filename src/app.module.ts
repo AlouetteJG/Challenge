@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/user.entity';
 import { TaskModule } from './task/task.module';
 import { Task } from './task/task.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { Task } from './task/task.entity';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       playground: true, // Habilita el Playground
       sortSchema: true,
+      context: ({req}) => ({req}), //Necesario para acceder a req.user en guards y resolvers
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -28,6 +30,7 @@ import { Task } from './task/task.entity';
     }),
     UserModule,
     TaskModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

@@ -1,9 +1,9 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Task } from "./task.entity";
-import { UpdateTaskInput } from "./tasks/update-task.input";
-import { CreateTaskInput } from "./tasks/create-task.input";
+import { UpdateTaskInput } from "./dto/update-task.input";
+import { CreateTaskInput } from "./dto/create-task.input";
 import { User } from "src/user/user.entity";
 
 @Injectable()
@@ -28,20 +28,28 @@ export class TaskService{
         return this.taskRepository.save(task);
     }
 
-    async updateTask(updateTaskInput: UpdateTaskInput):Promise<Task>{
+    async updateTask(updateTaskInput: UpdateTaskInput, user:User):Promise<Task>{
         const task = await this.taskRepository.preload(updateTaskInput);
         if (!task) {
             throw new NotFoundException(`User with ID ${updateTaskInput.id} not found`);
         }
+
         if (updateTaskInput.assignedId) {
-            const user = await this.userRepository.findOne({
+            const assignedUser = await this.userRepository.findOne({
                 where: { id: updateTaskInput.assignedId },
             });
-            if (!user) {
+            if (!assignedUser) {
                 throw new NotFoundException(`User with ID ${updateTaskInput.assignedId} not found`);
             }
-            task.assigned = user;
+            task.assigned = assignedUser;
         }
+
+        if(user.role !== 'admin'){
+            if(updateTaskInput.title || updateTaskInput.description || updateTaskInput.assignedId){
+                throw new ForbiddenException('Permission denied to update this field');
+            }
+        }
+        
         return this.taskRepository.save(task);
     }
 
