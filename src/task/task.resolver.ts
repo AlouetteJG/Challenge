@@ -12,11 +12,15 @@ import { Roles } from "src/auth/guards/roles.decorator";
 export class TaskResolver{
     constructor(private readonly taskService:TaskService){}
 
+    @UseGuards(JwtAuthGuard,RolesGuard)
+    @Roles('admin','member')
     @Query(()=>[Task])
     findAllTasks(){
         return this.taskService.findAllTasks();
     }
 
+    @UseGuards(JwtAuthGuard,RolesGuard)
+    @Roles('admin','member')
     @Query(()=>Task)
     findTaskById(@Args('id', {type: ()=> Number}) id: number){
         return this.taskService.findOneTask(id);
@@ -29,11 +33,11 @@ export class TaskResolver{
         return this.taskService.createTask(createTaskInput);
     }
 
-    @UseGuards(RolesGuard)
+    @UseGuards(JwtAuthGuard,RolesGuard)
+    @Roles('admin','member')
     @Mutation(()=>Task)
-    updateTask(@Args('updateTaskInput') updateTaskInput: UpdateTaskInput, @Context() context:any): Promise<Task>{
+    updateTask(@Args('updateTaskInput') updateTaskInput: UpdateTaskInput, @Context() context): Promise<Task>{
         const user = context.req.user;
-        console.log('User role ===>', user.role);
         return this.taskService.updateTask(updateTaskInput,user);
     }
 

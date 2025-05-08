@@ -43,7 +43,7 @@ export class TaskService{
             }
             task.assigned = assignedUser;
         }
-
+        
         if(user.role !== 'admin'){
             if(updateTaskInput.title || updateTaskInput.description || updateTaskInput.assignedId){
                 throw new ForbiddenException('Permission denied to update this field');
