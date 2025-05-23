@@ -1,11 +1,11 @@
-import { Field, InputType, Int, PartialType } from "@nestjs/graphql";
-import { CreateTaskInput } from "./create-task.input";
+import { Field, ID, InputType, PartialType } from '@nestjs/graphql';
+import { CreateTaskInput } from './create-task.input';
 
 @InputType()
-export class UpdateTaskInput extends PartialType(CreateTaskInput){
-    @Field(()=> Int)
-    id:number;
+export class UpdateTaskInput extends PartialType(CreateTaskInput) {
+  @Field(() => ID)
+  id: string;
 
-    @Field({ nullable: true })
-    description?: string;
+  @Field({ nullable: true })
+  description?: string;
 }

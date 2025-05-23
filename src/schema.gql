@@ -3,7 +3,7 @@
 # ------------------------------------------------------
 
 input CreateTaskInput {
-  assignedId: Int!
+  assignedId: ID!
   description: String
   status: TaskStatus!
   title: String!
@@ -11,9 +11,9 @@ input CreateTaskInput {
 
 input CreateUserInput {
   email: String!
+  isActive: Boolean!
   password: String!
   role: String!
-  status: String!
 }
 
 input LoginInput {
@@ -25,8 +25,8 @@ type Mutation {
   createTask(createTaskInput: CreateTaskInput!): Task!
   createUser(data: CreateUserInput!): User!
   login(loginInput: LoginInput!): String!
-  removeTask(id: Float!): Boolean!
-  removeUser(id: Float!): Boolean!
+  removeTask(id: String!): Boolean!
+  removeUser(id: String!): Boolean!
   updateTask(updateTaskInput: UpdateTaskInput!): Task!
   updateUser(updateUserInput: UpdateUserInput!): User!
 }
@@ -34,14 +34,14 @@ type Mutation {
 type Query {
   findAllTasks: [Task!]!
   findAllUsers: [User!]!
-  findTaskById(id: Float!): Task!
-  findUserById(id: Float!): User!
+  findTaskById(id: String!): Task!
+  findUserById(id: String!): User!
 }
 
 type Task {
   assigned: User!
   description: String
-  id: Float!
+  id: String!
   status: TaskStatus!
   title: String!
 }
@@ -53,25 +53,30 @@ enum TaskStatus {
 }
 
 input UpdateTaskInput {
-  assignedId: Int
+  assignedId: ID
   description: String
-  id: Int!
+  id: ID!
   status: TaskStatus
   title: String
 }
 
 input UpdateUserInput {
   email: String
-  id: Int!
+  id: ID!
+  isActive: Boolean
   password: String
   role: String
-  status: String
 }
 
 type User {
   email: String!
   id: ID!
-  role: String!
-  status: String!
+  isActive: Boolean!
+  role: UserRole!
   tasks: [Task!]
+}
+
+enum UserRole {
+  admin
+  member
 }

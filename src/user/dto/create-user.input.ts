@@ -1,18 +1,22 @@
-import { Field, InputType } from "@nestjs/graphql";
-import { UserStatus } from "../user.entity";
+import { Field, InputType } from '@nestjs/graphql';
+import { UserRole } from '../user.entity';
+import { IsEmail, Length } from 'class-validator';
 
 @InputType()
 export class CreateUserInput {
-    @Field()
-    email:string;
+  @Field()
+  @IsEmail({}, { message: 'El email no tiene un formato válido.' })
+  email: string;
 
-    @Field()
-    password:string;
+  @Field()
+  @Length(8, 20, {
+    message: 'La contraseña debe tener entre 8 y 20 caracteres.',
+  })
+  password: string;
 
-    @Field()
-    role: 'admin' | 'member';
+  @Field()
+  role: UserRole;
 
-    @Field()
-    status: UserStatus;
-
+  @Field()
+  isActive: boolean;
 }

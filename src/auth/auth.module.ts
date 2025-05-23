@@ -9,11 +9,11 @@ import { JwtStrategy } from './jwt.strategy';
   imports: [
     JwtModule.register({
       secret: process.env.JWT_SECRET || 'SECRET', // guárdalo en .env si es posible
-      signOptions: { expiresIn: '2m' },
+      signOptions: { expiresIn: '2d' },
     }),
     UserModule,
   ],
   providers: [AuthResolver, AuthService, JwtStrategy],
-  exports:[JwtModule,AuthModule],
+  exports: [JwtModule, AuthModule],
 })
 export class AuthModule {}

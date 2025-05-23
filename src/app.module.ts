@@ -16,7 +16,7 @@ import { AuthModule } from './auth/auth.module';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       playground: true, // Habilita el Playground
       sortSchema: true,
-      context: ({req}) => ({req}), //Necesario para acceder a req.user en guards y resolvers
+      context: ({ req }) => ({ req }), //Necesario para acceder a req.user en guards y resolvers
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -25,7 +25,7 @@ import { AuthModule } from './auth/auth.module';
       username: 'devlocaluser',
       password: 'devlocaluser1234',
       database: 'devlocaldb',
-      entities: [User,Task],
+      entities: [User, Task],
       synchronize: true,
     }),
     UserModule,
